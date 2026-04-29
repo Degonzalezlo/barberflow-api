@@ -1,0 +1,23 @@
+spring.application.name=barberflow-api
+
+# Puerto del servidor
+server.port=8081
+
+# Driver para PostgreSQL
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# URL de conexión a la base de datos en Docker
+spring.datasource.url=jdbc:postgresql://localhost:5432/barberflow_db
+spring.datasource.username= youUserNameHere
+spring.datasource.password= youPasswordHere
+
+# Mostrar consultas SQL en consola para debug
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# Gestión del esquema de BD
+#spring.jpa.hibernate.ddl-auto=update
+
+# Dialecto para PostgreSQL de Hibernate
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+

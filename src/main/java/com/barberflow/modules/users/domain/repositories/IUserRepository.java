@@ -1,0 +1,21 @@
+package com.barberflow.modules.users.domain.repositories;
+
+
+
+import com.barberflow.modules.users.domain.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.Optional;
+import java.util.List;
+
+@Repository
+public interface IUserRepository extends JpaRepository<User, Long> {
+
+    Optional<User> findByEmail(String email);
+
+    List<User> findByBarbershopBarbershopId(Long barbershopId);
+    
+    Boolean existsByEmail(String email);
+
+    
+}

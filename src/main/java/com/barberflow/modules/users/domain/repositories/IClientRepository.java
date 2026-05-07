@@ -9,12 +9,13 @@ import org.springframework.stereotype.Repository;
 public interface IClientRepository extends JpaRepository <Client, Long> {
 
     // Spring genera el SQL: SELECT * FROM clients WHERE email = ?
-    Optional<Client> findByEmail(String email);
+    Optional<Client> findByUserEmail(String email);
 
     // Para buscar por teléfono (el campo que indexamos)
     Optional<Client> findByPhone(String phone);
     
     // Para saber si ya existe antes de crearlo
-    boolean existsByEmail(String email);
+    boolean existsByUserEmail(String email);
     
 }
+    

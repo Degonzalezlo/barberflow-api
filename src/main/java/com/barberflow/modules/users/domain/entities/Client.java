@@ -3,14 +3,14 @@ package com.barberflow.modules.users.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Entity
 @Table(name = "clients", indexes = @Index(name = "idx_client_phone", columnList = "phone")) // Índice para optimizar búsquedas por teléfono
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder // Genera objetos de forma elegante
-
+@Builder
 
 public class Client {
 
@@ -25,9 +25,6 @@ public class Client {
 
     @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
-
-    @Column(name = "email", unique = true, nullable = false, length = 100)
-    private String email;
 
     @Column(name = "phone", unique = true, nullable = false, length = 20)
     private String phone;

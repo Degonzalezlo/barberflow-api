@@ -24,8 +24,8 @@ public class ClientService {
     @Transactional
     public Client saveClient(Client client) {
         // Regla de negocio: Validar si el email ya existe
-        if (clientRepository.existsByEmail(client.getEmail())) {
-            throw new RuntimeException("The email " + client.getEmail() + " is already registered.");
+        if (clientRepository.existsByUserEmail(client.getUser().getEmail())) {
+            throw new RuntimeException("The email " + client.getUser().getEmail() + " is already registered.");
         }
         return clientRepository.save(client);
     }

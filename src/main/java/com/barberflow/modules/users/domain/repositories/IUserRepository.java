@@ -2,7 +2,10 @@ package com.barberflow.modules.users.domain.repositories;
 
 
 
+import com.barberflow.modules.users.domain.entities.Barbershop;
 import com.barberflow.modules.users.domain.entities.User;
+import com.barberflow.modules.users.domain.entities.UserRole;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
@@ -16,6 +19,8 @@ public interface IUserRepository extends JpaRepository<User, Long> {
     List<User> findByBarbershopBarbershopId(Long barbershopId);
     
     Boolean existsByEmail(String email);
+
+    Boolean existsByBarbershopAndRole(Barbershop barbershop, UserRole role);
 
     
 }

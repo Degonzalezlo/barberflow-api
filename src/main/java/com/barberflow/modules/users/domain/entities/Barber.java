@@ -21,6 +21,10 @@ public class Barber {
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private User user; // Conexión obligatoria al login
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "barbershop_id", nullable = false)
+    private Barbershop barbershop; // Barbería a la que pertenece el barbero    
+
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 

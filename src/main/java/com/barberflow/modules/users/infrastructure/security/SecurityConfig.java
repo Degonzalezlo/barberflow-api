@@ -3,6 +3,7 @@ package com.barberflow.modules.users.infrastructure.security;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -22,18 +24,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> cors.disable()) // Deshabilitamos CORS para desarrollo local, en producción configúralo correctamente
             .csrf(csrf -> csrf.disable()) // Deshabilitamos CSRF para poder usar Postman sin tokens complejos
             .authorizeHttpRequests(auth -> auth
                 // Permitimos el acceso público a la ruta de registro
-                .requestMatchers("/api/users/register").permitAll() 
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/error").permitAll()
 
                 // Solo los ADMIN pueden ver ventas y gestionar barberos
                 .requestMatchers("/api/sales/**").hasRole("ADMIN")
                 .requestMatchers("/api/barbers/**").hasRole("ADMIN")
             
             // Clientes y Admin pueden ver servicios y agendar
-                .requestMatchers("/api/services/**").hasAnyRole("ADMIN", "CLIENT")
-                .requestMatchers("/api/appointments/**").hasAnyRole("ADMIN", "CLIENT")
+                .requestMatchers("/api/services/**").hasAnyRole("ADMIN", "CLIENT", "BARBER")
+                .requestMatchers("/api/appointments/**").hasAnyRole("ADMIN", "CLIENT", "BARBER")
                 // Cualquier otra ruta de la API requerirá autenticación
                 .anyRequest().authenticated()
             )

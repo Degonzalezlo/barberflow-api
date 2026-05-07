@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.barberflow.modules.users.domain.entities.Client.ClientBuilder;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,10 +23,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
 @Entity
 @Table(name = "users" , indexes = @Index(name = "idx_user_email", columnList = "email")) // Índice para optimizar búsquedas por email
 @AllArgsConstructor 
@@ -56,17 +60,20 @@ public class User implements org.springframework.security.core.userdetails.UserD
     private UserRole role; // ADMIN, BARBER, CLIENT
 
 
+    @Builder.Default
     private Boolean isActive = true;
 
+    @Builder.Default
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
 
     // ---  MÉTODOS OBLIGATORIOS DE SPRING SECURITY ---
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Esto le pone la etiqueta de rol al token (ej: ROLE_ADMIN)
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
     }
 
     @Override
@@ -98,6 +105,7 @@ public class User implements org.springframework.security.core.userdetails.UserD
     public boolean isEnabled() {
         return isActive; // Si desactivas al usuario, el token deja de funcionar
     }
+    
 
 
     

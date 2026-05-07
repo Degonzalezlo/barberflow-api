@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class ServiceEntity {
 
     @Id
@@ -20,7 +21,7 @@ public class ServiceEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barbershop_id", nullable = true) // <--- ¡Esto es clave para ti!
+    @JoinColumn(name = "barbershop_id", nullable = false) // <--- ¡Esto es clave para ti!
     private Barbershop barbershop;
 
     @Column(nullable = false, length = 50)

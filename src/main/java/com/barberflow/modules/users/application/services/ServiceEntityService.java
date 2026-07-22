@@ -1,8 +1,11 @@
 package com.barberflow.modules.users.application.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import com.barberflow.modules.users.application.dtos.ServiceRequestDTO;
+import com.barberflow.modules.users.application.dtos.ServiceResponseDTO;
 import com.barberflow.modules.users.domain.entities.Barbershop;
 import com.barberflow.modules.users.domain.entities.ServiceEntity;
 import com.barberflow.modules.users.domain.repositories.IBarbershopRepository;
@@ -16,7 +19,7 @@ public class ServiceEntityService {
     private final IServiceEntityRepository serviceRepository;
     private final IBarbershopRepository barbershopRepository;
 
-    public ServiceEntity createService(ServiceRequestDTO dto) {
+    public ServiceResponseDTO createService(ServiceRequestDTO dto) {
         // 1. Validar que la barbería existe
         Barbershop barbershop = barbershopRepository.findById(dto.getBarbershopId())
                 .orElseThrow(() -> new RuntimeException("Barbería no encontrada"));
@@ -30,11 +33,28 @@ public class ServiceEntityService {
                 .barbershop(barbershop)
                 .build();
 
-        return serviceRepository.save(service);
+        ServiceEntity savedEntity = serviceRepository.save(service);
+
+        return mapToResponseDTO(savedEntity);
     }
 
-    public List<ServiceEntity> getServicesByBarbershop(Long barbershopId) {
-        return serviceRepository.findByBarbershopBarbershopId(barbershopId);
+    public List<ServiceResponseDTO> getServicesByBarbershop(Long barbershopId) {
+        return serviceRepository.findByBarbershopBarbershopId(barbershopId)
+                .stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    private ServiceResponseDTO mapToResponseDTO(ServiceEntity entity) {
+        ServiceResponseDTO response = new ServiceResponseDTO();
+        response.setId(entity.getId());
+        response.setName(entity.getName());
+        response.setDescription(entity.getDescription());
+        response.setPrice(entity.getPrice());
+        response.setDurationMinutes(entity.getDurationMinutes());
+        response.setBarbershopId(entity.getBarbershop().getBarbershopId());
+        response.setBarbershopName(entity.getBarbershop().getBusinessName());
+        return response;
     }
     
 }

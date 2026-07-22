@@ -39,6 +39,7 @@ public class User implements org.springframework.security.core.userdetails.UserD
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "appointments", indexes = @Index(name = "idx_appointment_tenant_date", columnList = "barbershop_id, appointment_date")) // Índice para optimizar consultas por barbería y fecha
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

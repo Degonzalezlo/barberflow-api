@@ -15,10 +15,10 @@ public class Barber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "barber_id")
-    private Long id;
+    private Long barberId;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "userId")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user; // Conexión obligatoria al login
 
     @ManyToOne(fetch = FetchType.LAZY)

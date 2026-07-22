@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.barberflow.modules.users.application.dtos.ServiceRequestDTO;
+import com.barberflow.modules.users.application.dtos.ServiceResponseDTO;
 import com.barberflow.modules.users.application.services.ServiceEntityService;
 import com.barberflow.modules.users.domain.entities.ServiceEntity;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,14 @@ public class ServiceEntityController {
     private final ServiceEntityService serviceEntityService;
 
     @PostMapping("/create")
-    public ResponseEntity<ServiceEntity> createService(@RequestBody ServiceRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(serviceEntityService.createService(dto));
+    public ResponseEntity<ServiceResponseDTO> createService(@RequestBody ServiceRequestDTO dto) {
+            ServiceResponseDTO response = serviceEntityService.createService(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/shop/{barbershopId}")
-    public ResponseEntity<List<ServiceEntity>> listServices(@PathVariable Long barbershopId) {
-        return ResponseEntity.ok(serviceEntityService.getServicesByBarbershop(barbershopId));
+    public ResponseEntity<List<ServiceResponseDTO>> listServices(@PathVariable Long barbershopId) {
+        List<ServiceResponseDTO> services = serviceEntityService.getServicesByBarbershop(barbershopId);
+        return ResponseEntity.ok(services);
     }
 }

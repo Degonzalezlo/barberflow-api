@@ -28,6 +28,7 @@ public class Barbershop {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "barbershop_id")
     private Long barbershopId;
 
     @Column(unique = true, nullable = false)
@@ -35,8 +36,12 @@ public class Barbershop {
 
     @Column(name = "business_name", nullable = false)
     private String businessName;
-
+    
+    
+    @Column(name = "address")
     private String address;
+    
+    @Column(name = "phone")
     private String phone;
 
     @Enumerated(EnumType.STRING)

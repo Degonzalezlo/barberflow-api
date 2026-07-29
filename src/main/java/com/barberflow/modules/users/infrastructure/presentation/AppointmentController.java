@@ -1,5 +1,6 @@
 package com.barberflow.modules.users.infrastructure.presentation;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,22 +35,32 @@ public class AppointmentController {
 
     // 1. Endpoint para CREAR una cita
     @PostMapping("/book")
-    public ResponseEntity<AppointmentResponseDTO> bookAppointment(@RequestBody AppointmentRequestDTO dto) {
-        AppointmentResponseDTO response = appointmentService.createAppointment(dto);
+    public ResponseEntity<AppointmentResponseDTO> bookAppointment(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody AppointmentRequestDTO dto) {
+        String email = userDetails.getUsername(); // Obtener el email del usuario autenticado
+        AppointmentResponseDTO response = appointmentService.createAppointment(dto, email);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // 2. Enpoint para Cancelar una cita
     @PatchMapping("/cancel/{appointmentId}")
-    public ResponseEntity<AppointmentResponseDTO> cancelAppointment(@PathVariable Long appointmentId) {
-        AppointmentResponseDTO response = appointmentService.cancelAppointment(appointmentId);
+    public ResponseEntity<AppointmentResponseDTO> cancelAppointment(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long appointmentId) throws AccessDeniedException {
+        String email = userDetails.getUsername(); // Obtener el email del usuario autenticado
+        AppointmentResponseDTO response = appointmentService.cancelAppointment(appointmentId, email);
         return ResponseEntity.ok(response);
     }
 
     // 3. Endpoint para ACTUALIZAR una cita
     @PutMapping("/update/{appointmentId}")
-    public ResponseEntity<AppointmentResponseDTO> updateAppointment(@PathVariable Long appointmentId, @RequestBody AppointmentRequestDTO dto) {
-        AppointmentResponseDTO response = appointmentService.updateAppointment(appointmentId, dto);
+    public ResponseEntity<AppointmentResponseDTO> updateAppointment(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long appointmentId,
+            @RequestBody AppointmentRequestDTO dto) throws AccessDeniedException {
+        String email = userDetails.getUsername(); // Obtener el email del usuario autenticado
+        AppointmentResponseDTO response = appointmentService.updateAppointment(appointmentId, dto, email);
         return ResponseEntity.ok(response);
     }
 
@@ -61,11 +72,7 @@ public class AppointmentController {
             @RequestParam(value ="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
         String email = userDetails.getUsername(); // Obtener el email del usuario autenticado
-        String role = userDetails.getAuthorities().stream()
-                .findFirst()
-                .map(auth -> auth.getAuthority())
-                .orElseThrow(() -> new RuntimeException("No se pudo determinar el rol del usuario"));
-
+        
         LocalDate finalEndDate = endDate != null ? endDate : startDate; // Si no se proporciona endDate, usar startDate
         
         List<AppointmentResponseDTO> agenda = appointmentService.getAgendaForAuthenticatedUser(email, startDate, finalEndDate);

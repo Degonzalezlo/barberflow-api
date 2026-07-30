@@ -114,40 +114,56 @@ public class AppointmentService {
     // 3. ACTUALIZAR / REAGENDAR CITA
     // ==========================================
     @Transactional
-    public AppointmentResponseDTO updateAppointment(Long appointmentId, AppointmentRequestDTO dto, String userEmail) throws AccessDeniedException {
-        User currentUser = IUserRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+    public AppointmentResponseDTO updateAppointment(Long appointmentId, AppointmentRequestDTO dto, String userEmail)
+                    throws AccessDeniedException {
+            User currentUser = IUserRepository.findByEmail(userEmail)
+                            .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cita no encontrada"));
+            Appointment appointment = appointmentRepository.findById(appointmentId)
+                            .orElseThrow(() -> new ResourceNotFoundException("Cita no encontrada"));
 
-        // Validar permisos sobre este recurso
-        validateOwnership(appointment, currentUser);
+            // 1. Validar que el usuario autenticado sea el dueño/admin de la cita actual
+            validateOwnership(appointment, currentUser);
 
-        Barber newBarber = barberRepository.findById(dto.getBarberId())
-                .orElseThrow(() -> new ResourceNotFoundException("Barbero no encontrado"));
+            Barber newBarber = barberRepository.findById(dto.getBarberId())
+                            .orElseThrow(() -> new ResourceNotFoundException("Barbero no encontrado"));
 
-        ServiceEntity newService = serviceRepository.findById(dto.getServiceId())
-                .orElseThrow(() -> new ResourceNotFoundException("Servicio no encontrado"));
+            // 2.Si quien edita es un BARBER, solo puede reasignarse a SÍ MISMO
+            if (currentUser.getRole() == UserRole.BARBER
+                            && !newBarber.getUser().getEmail().equals(currentUser.getEmail())) {
+                    throw new BusinessRuleException("Un barbero no puede reasignar sus citas a otro barbero.");
+            }
+            // 3.Ni el cliente ni el barbero pueden cambiar el cliente de una cita existente
+            if (currentUser.getRole() != UserRole.ADMIN) {
+                if (dto.getClientId() != null && !appointment.getClient().getClientId().equals(dto.getClientId())) {
+                        throw new BusinessRuleException("No está permitido cambiar el cliente asignado a una cita existente.");
+                }
+            }
+            // 4. Si es ADMIN, permitir la reasignación del cliente
+            if (currentUser.getRole() == UserRole.ADMIN && dto.getClientId() != null) {
+                Client newClient = clientRepository.findById(dto.getClientId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con ID: " + dto.getClientId()));
+    
+                    appointment.setClient(newClient);
+            }
 
-        // TODO: Validar Overlap con los nuevos datos de fecha y hora
-        // En updateAppointment (usamos el método que excluye la cita actual):
-       // ... Validar Nuevo Servicio
-        LocalTime newEnd = dto.getStartTime().plusMinutes(newService.getDurationMinutes());
+            ServiceEntity newService = serviceRepository.findById(dto.getServiceId())
+                            .orElseThrow(() -> new ResourceNotFoundException("Servicio no encontrado"));
 
-        // [Regla de Negocio] Validar Overlap excluyendo la cita actual
-        validateOverlap(newBarber.getBarberId(), dto.getAppointmentDate(), dto.getStartTime(), newEnd, appointmentId);
+            // 3. Validar Overlap excluyendo la cita actual
+            LocalTime newEnd = dto.getStartTime().plusMinutes(newService.getDurationMinutes());
+            validateOverlap(newBarber.getBarberId(), dto.getAppointmentDate(), dto.getStartTime(), newEnd,
+                            appointmentId);
 
-        // Actualizar cita...
+            // 4. Actualizar cita
+            appointment.setBarber(newBarber);
+            appointment.setService(newService);
+            appointment.setStartTime(dto.getStartTime());
+            appointment.setAppointmentDate(dto.getAppointmentDate());
 
-        appointment.setBarber(newBarber);
-        appointment.setService(newService);
-        appointment.setStartTime(dto.getStartTime());
-        appointment.setAppointmentDate(dto.getAppointmentDate());
+            Appointment updatedAppointment = appointmentRepository.save(appointment);
 
-        Appointment updatedAppointment = appointmentRepository.save(appointment);
-
-        return mapToResponseDTO(updatedAppointment);
+            return mapToResponseDTO(updatedAppointment);
     }
 
     // ==========================================

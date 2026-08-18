@@ -37,4 +37,8 @@ public class ServiceEntity {
     @Column(name = "duration_minutes", nullable = false)
     @Positive(message = "La duración debe ser un mayor a 0")
     private Integer durationMinutes;
+
+    @Column(name = "is_active", nullable = false)
+    @Builder.Default
+    private Boolean isActive = true;
 }

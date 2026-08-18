@@ -11,4 +11,6 @@ import com.barberflow.modules.users.domain.entities.ServiceEntity;
 public interface IServiceEntityRepository extends JpaRepository<ServiceEntity, Long> {
     
     List<ServiceEntity> findByBarbershopBarbershopId(Long barbershopId);
+
+    boolean existsByNameAndBarbershopBarbershopId(String name, Long barbershopId);
 }

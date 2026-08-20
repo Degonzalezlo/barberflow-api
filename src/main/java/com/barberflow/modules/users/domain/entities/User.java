@@ -4,12 +4,8 @@ package com.barberflow.modules.users.domain.entities;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import com.barberflow.modules.users.domain.entities.Client.ClientBuilder;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

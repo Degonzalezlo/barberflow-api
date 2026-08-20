@@ -16,7 +16,7 @@ import com.barberflow.modules.users.application.dtos.UserRegistrationDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/auth") // Ruta base para autenticación
+@RequestMapping("/api/v1/auth") // Ruta base para autenticación
 @RequiredArgsConstructor
 public class AuthController {
 

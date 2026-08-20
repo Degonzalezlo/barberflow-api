@@ -1,6 +1,5 @@
 package com.barberflow.modules.users.application.dtos;
 
-import com.barberflow.modules.users.domain.entities.Barbershop;
 import com.barberflow.modules.users.domain.entities.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -22,7 +22,7 @@ import com.barberflow.modules.users.domain.entities.ServiceEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 @RestController
-@RequestMapping("/api/services")
+@RequestMapping("/api/v1/services")
 @RequiredArgsConstructor
 public class ServiceEntityController {
 

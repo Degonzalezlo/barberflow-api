@@ -4,7 +4,6 @@ package com.barberflow.modules.users.infrastructure.presentation;
 import com.barberflow.modules.users.application.dtos.UserRegistrationDTO;
 import com.barberflow.modules.users.application.dtos.UserResponseDTO;
 import com.barberflow.modules.users.application.services.UserService;
-import com.barberflow.modules.users.domain.entities.User;
 import com.barberflow.modules.users.domain.entities.UserRole;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 

@@ -27,7 +27,7 @@ import lombok.AllArgsConstructor;
 
 
 @RestController
-@RequestMapping("/api/appointments")
+@RequestMapping("/api/v1/appointments")
 @AllArgsConstructor
 public class AppointmentController {
 

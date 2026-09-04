@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.barberflow.modules.users.application.dtos.CouponResponseDTO;
 import com.barberflow.modules.users.application.dtos.CreateCouponDTO;
 import com.barberflow.modules.users.application.services.CouponService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

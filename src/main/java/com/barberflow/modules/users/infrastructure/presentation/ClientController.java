@@ -21,19 +21,19 @@ public class ClientController {
     
     private final ClientService clientService;
 
-    // Obtener todos los clientes (GET http://localhost:8080/api/v1/clients)
+    // Obtener todos los clientes (GET http://localhost:8081/api/v1/clients)
     @GetMapping
     public ResponseEntity<List<Client>> getAll() {
         return ResponseEntity.ok(clientService.getAllClients());
     }
 
-    // Crear un nuevo cliente (POST http://localhost:8080/api/v1/clients)
+    // Crear un nuevo cliente (POST http://localhost:8081/api/v1/clients)
     @PostMapping
     public ResponseEntity<Client> create(@RequestBody Client client) {
         return new ResponseEntity<>(clientService.saveClient(client), HttpStatus.CREATED);
     }
 
-    // Buscar uno por ID (GET http://localhost:8080/api/v1/clients/1)
+    // Buscar uno por ID (GET http://localhost:8081/api/v1/clients/1)
     @GetMapping("/{id}")
     public ResponseEntity<Client> getById(@PathVariable Long id) {
         return clientService.getClientById(id)

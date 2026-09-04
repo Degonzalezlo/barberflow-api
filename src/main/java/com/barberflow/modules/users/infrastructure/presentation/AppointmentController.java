@@ -23,6 +23,7 @@ import com.barberflow.modules.users.application.dtos.AppointmentRequestDTO;
 import com.barberflow.modules.users.application.dtos.AppointmentResponseDTO;
 import com.barberflow.modules.users.application.services.AppointmentService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 
@@ -37,7 +38,7 @@ public class AppointmentController {
     @PostMapping("/book")
     public ResponseEntity<AppointmentResponseDTO> bookAppointment(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody AppointmentRequestDTO dto) {
+            @RequestBody @Valid AppointmentRequestDTO dto) {
         String email = userDetails.getUsername(); // Obtener el email del usuario autenticado
         AppointmentResponseDTO response = appointmentService.createAppointment(dto, email);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

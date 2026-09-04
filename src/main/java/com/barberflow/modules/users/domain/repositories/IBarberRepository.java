@@ -2,12 +2,13 @@ package com.barberflow.modules.users.domain.repositories;
 
 
 import com.barberflow.modules.users.domain.entities.Barber;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+
 public interface IBarberRepository extends JpaRepository<Barber, Long> {
     
     // Este método es vital para BarberFlow:
@@ -16,4 +17,6 @@ public interface IBarberRepository extends JpaRepository<Barber, Long> {
     
     // También podrías buscar por el ID del usuario vinculado
     Optional<Barber> findByUserUserId(Long userId);
+
+    Optional<Barber> findByBarberIdAndBarbershopBarbershopId(Long barberId, Long barbershopId);
 }

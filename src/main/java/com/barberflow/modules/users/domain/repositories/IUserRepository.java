@@ -22,5 +22,7 @@ public interface IUserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByBarbershopAndRole(Barbershop barbershop, UserRole role);
 
+    Optional<User> findByUserIdAndBarbershopBarbershopId(Long userId, Long barbershopId);
+
     
 }

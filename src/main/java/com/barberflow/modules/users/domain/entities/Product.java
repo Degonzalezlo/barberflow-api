@@ -21,7 +21,7 @@ public class Product {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barbershop_id", nullable = true) // <--- ¡Esto es clave!
+    @JoinColumn(name = "barbershop_id", nullable = false) // <--- ¡Esto es clave!
     private Barbershop barbershop;
 
     @Column(nullable = false, length = 100)
@@ -49,8 +49,19 @@ public class Product {
     }
 
     public void reduceStock(int quantity) {
-        if (this.stockQuantity >= quantity) {
+        if (this.stockQuantity < quantity) {
+            throw new IllegalArgumentException("No hay suficiente stock para el producto: " + this.name);
+        } else {
             this.stockQuantity -= quantity;
+        }
+    }
+
+    public void addStock(int quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("La cantidad a agregar no puede ser negativa");
+        } else {
+            this.stockQuantity += quantity;
+            this.lastRestock = LocalDateTime.now();
         }
     }
 }

@@ -4,6 +4,7 @@ package com.barberflow.modules.users.domain.entities;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import jakarta.persistence.Column;
@@ -18,6 +19,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

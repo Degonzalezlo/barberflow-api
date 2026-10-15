@@ -1,4 +1,4 @@
-package barberflow_api;
+package com.barberflow;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

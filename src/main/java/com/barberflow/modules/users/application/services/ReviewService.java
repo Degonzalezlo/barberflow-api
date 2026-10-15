@@ -49,7 +49,7 @@ public class ReviewService {
     public List<ReviewResponse> getReviewsByBarbershop(Long barbershopId) {
         return reviewRepository.findByBarbershopBarbershopIdOrderByCreatedAtDesc(barbershopId)
                 .stream()
-                .map(this::mapToResponse)
+                .map(review -> mapToResponse(review))
                 .toList();
     }
 
